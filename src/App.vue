@@ -17,16 +17,19 @@ export default {
     return {
       newTodo: '',
       todos: handlingTodos.getTodos(),
-      editId: -1
+      editId: -1,
+      newButtonClicked: false
     }
   },
   methods: {
     addTodo() {
-      const todo = { id: handlingTodos.todoId++, text: this.newTodo }
-      console.log(todo)
-      this.todos.push(todo)
-      console.log(this.todos)
-      this.newTodo = ''
+      if(this.newButtonClicked){
+        const todo = { id: handlingTodos.todoId++, text: this.newTodo }
+        this.todos.push(todo)
+        this.newTodo = ''
+        return this.newButtonClicked = false;
+      }
+      this.newButtonClicked = true;
     },
     removeTodo(todo) {
      this.todos = this.todos.filter(_todo => _todo != todo);
@@ -52,10 +55,6 @@ export default {
 </script>
 
 <template>
-  <form @submit.prevent="addTodo">
-    <input v-model="newTodo">
-    <button>Todoを追加する</button>    
-  </form>
   <ul>
     <li v-for="todo in todos" :key="todo.id">
       <div v-if="todo.id!=editId">{{ todo.text }}</div>
@@ -64,4 +63,6 @@ export default {
       <button @click="removeTodo(todo)">削除</button>
     </li>
   </ul>
+  <button @click="addTodo">+</button>
+  <div v-if="newButtonClicked"><input v-model="newTodo"></div>
 </template>
