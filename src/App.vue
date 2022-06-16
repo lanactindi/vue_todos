@@ -5,7 +5,6 @@ const handlingTodos = {
   },
   getTodos: function() {
     const todos = JSON.parse(localStorage.getItem('todos-vue')) || [];
-    console.log(todos)
     todos.forEach((todo, i) => todo.id = i);
     handlingTodos.todoId = todos.length + 1;
     return todos;
