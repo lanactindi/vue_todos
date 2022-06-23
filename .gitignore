@@ -22,4 +22,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-.babel.config.js
+jsconfig.json
