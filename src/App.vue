@@ -1,49 +1,44 @@
 <script>
-const handlingTodos = {
-  setTodos: function(todos){
-    return localStorage.setItem('todos-vue', JSON.stringify(todos))
-  },
-  getTodos: function() {
-    const todos = JSON.parse(localStorage.getItem('todos-vue')) || [];
-    todos.forEach((todo, i) => todo.id = i);
-    handlingTodos.todoId = todos.length + 1;
-    return todos;
-  },
-}
 
 export default {
   data() {
     return {
       newTodo: '',
-      todos: handlingTodos.getTodos(),
-      editId: -1
+      todos: this.getTodos(),
+      editId: -1,
+      todoId: this.getTodos().length ? this.getTodos().length + 1 : 0
     }
   },
   methods: {
     addTodo() {
-      const todo = { id: handlingTodos.todoId++, text: this.newTodo }
-      this.todos.push(todo)
-      this.newTodo = ''
+      const todo = { id: this.todoId++, text: this.newTodo };
+      this.todos.push(todo);
+      this.newTodo = '';
+      this.setTodos(this.todos);
     },
     removeTodo(todo) {
      this.todos = this.todos.filter(_todo => _todo != todo);
+     this.setTodos(this.todos);
     },
     editTodo(todo) {
       if(this.editId != -1){
         let editTodo = this.todos.find(_todo => _todo.id == todo.id);
         editTodo.text = todo.text;
-        return this.editId = -1;
+        this.editId = -1;
+        this.setTodos(this.todos);
+        return;
       }
       this.editId = todo.id;
-    }
-  },
-  watch: {
-    todos: {
-      handler: function(todos){
-        handlingTodos.setTodos(todos)
-      },
-      deep: true
-    }
+    },
+    setTodos(todos){
+     return localStorage.setItem('todos-vue', JSON.stringify(todos))
+    },
+    getTodos() {
+      const todos = JSON.parse(localStorage.getItem('todos-vue')) || [];
+      todos.forEach((todo, i) => todo.id = i);
+      this.todoId = todos.length + 1;
+      return todos;
+    },
   }
 }
 </script>
@@ -55,7 +50,7 @@ export default {
   </form>
   <ul>
     <li v-for="todo in todos" :key="todo.id">
-      <div v-if="todo.id!=editId">{{ todo.text }}</div>
+      <div v-if="todo.id != editId">{{ todo.text }}</div>
       <div v-else> <input v-model="todo.text"></div>
       <button @click="editTodo(todo)">変更</button>
       <button @click="removeTodo(todo)">削除</button>
