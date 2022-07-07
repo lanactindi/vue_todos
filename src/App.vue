@@ -35,7 +35,6 @@ export default {
     },
     getTodos() {
       const todos = JSON.parse(localStorage.getItem('todos-vue')) || [];
-      todos.forEach((todo, i) => todo.id = i);
       this.todoId = todos.length + 1;
       return todos;
     },
