@@ -27,13 +27,14 @@ export default {
       this.editedTodo = todo;
     },
     removeTodo() {
-      this.todos = this.todos.filter((_todo) => _todo != this.viewTodoObj);
+      this.todos = this.todos.filter((_todo) => _todo !== this.viewTodoObj);
       this.setTodo(this.todos);
+      this.viewTodoObj = null;
     },
     editTodo() {
       if (this.editedTodo) {
         let editTodo = this.todos.find(
-          (_todo) => _todo.id == this.viewTodoObj.id
+          (_todo) => _todo.id === this.viewTodoObj.id
         );
         editTodo.text = this.viewTodoObj.text;
         this.setTodo(this.todos);
